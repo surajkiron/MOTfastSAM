@@ -1,0 +1,8 @@
+.vscode
+.ipynb_checkpoints
+__pycache__
+FastSAM/assets
+FastSAM/examples
+FastSAM/images
+FastSAM/output
+resources/video/*.mp4
