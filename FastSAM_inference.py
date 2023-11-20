@@ -1,7 +1,7 @@
 import torch
 from PIL import Image
 import sys
-sys.path.insert(0,"/home/skn/arpl/Projects/fastSAM MOT/FastSAM")
+sys.path.insert(0,"/home/skn/arpl/Projects/MOTfastSAM/FastSAM")
 from fastsam import FastSAM, FastSAMPrompt 
 from utils.tools import convert_box_xywh_to_xyxy
 h= 640
