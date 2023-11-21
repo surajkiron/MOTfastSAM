@@ -4,8 +4,7 @@ import sys
 sys.path.insert(0,"/home/skn/arpl/Projects/MOTfastSAM/FastSAM")
 from fastsam import FastSAM, FastSAMPrompt 
 from utils.tools import convert_box_xywh_to_xyxy
-h= 640
-w = 480
+
 
 class get_fSAM():
 
@@ -25,6 +24,7 @@ class get_fSAM():
         self.better_quality = False
         self.retina = True
         self.withContours = False
+        self.output_frame = 0
 
         self.device = torch.device(
                 "cuda"
@@ -36,26 +36,25 @@ class get_fSAM():
         print("device: ", self.device)
 
 
-    def infer(self, img_path):
+    def infer(self, array, imsz):
         # load model
         model = FastSAM(self.model_path)
         point_prompt = self.point_prompt
         box_prompt = convert_box_xywh_to_xyxy(self.box_prompt)
         point_label = self.point_label
-        input = Image.open(img_path)
-        input = input.convert("RGB")
         everything_results = model(
-            input,
+            array,
             device=self.device,
             retina_masks=self.retina,
-            imgsz=self.imgsz,
             conf=self.conf,
             iou=self.iou    
             )
         bboxes = None
         points = None
         point_label = None
-        prompt_process = FastSAMPrompt(input, everything_results, device=self.device)
+        prompt_process = FastSAMPrompt(array, everything_results, device=self.device)
+        self.output_frame +=1
+
         if box_prompt[0][2] != 0 and box_prompt[0][3] != 0:
                 print("Box Prompt is ", self.box_prompt_prompt)
                 ann = prompt_process.box_prompt(bboxes=box_prompt)
@@ -74,7 +73,7 @@ class get_fSAM():
             ann = prompt_process.everything_prompt()
             output = prompt_process.plot(
             annotations=ann,
-            output_path=self.output+img_path.split("/")[-1],
+            output_path=self.output+str(self.output_frame)+".jpg",
             bboxes = bboxes,
             points = points,
             point_label = point_label,

@@ -5,22 +5,17 @@ import cv2
 
 def main(): 
 	object = get_fSAM()
-	img = object.infer('resources/images/dog.jpg')
+
 	vid = cv2.VideoCapture('resources/video/0.mp4') 
-	h= 640
-	w = 480
-	print(type(img))
-	cv2.namedWindow("Image", cv2.WINDOW_NORMAL) 
-	cv2.imshow('Image', img) 
-	cv2.waitKey(1)
+	
 
 	while(True): 
 		
 		ret, frame = vid.read() 
 
 		if ret == True:
-			cv2.imshow('frame', frame)
-		
+			seg = object.infer(frame, frame.shape[1]//2)
+			cv2.imshow('segmented image', seg)
 			if cv2.waitKey(1) & 0xFF == ord('q'): 
 				break
 		else:

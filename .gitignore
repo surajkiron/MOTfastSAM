@@ -6,3 +6,5 @@ FastSAM/examples
 FastSAM/images
 FastSAM/output
 resources/video/*.mp4
+resources/output/*.jpg
+FastSAM/weights/FastSAM.pt
